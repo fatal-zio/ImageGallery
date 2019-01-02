@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
+using IdentityModel.Client;
 
 namespace ImageGallery.Client.Controllers
 {
@@ -22,10 +23,7 @@ namespace ImageGallery.Client.Controllers
     {
         private readonly IImageGalleryHttpClient _imageGalleryHttpClient;
 
-        public GalleryController(IImageGalleryHttpClient imageGalleryHttpClient)
-        {
-            _imageGalleryHttpClient = imageGalleryHttpClient;
-        }
+        public GalleryController(IImageGalleryHttpClient imageGalleryHttpClient) => _imageGalleryHttpClient = imageGalleryHttpClient;
 
         public async Task<IActionResult> Index()
         {
@@ -168,6 +166,26 @@ namespace ImageGallery.Client.Controllers
             }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        public async Task<IActionResult> OrderFrame()
+        {
+            var discoveryClient = new DiscoveryClient("https://localhost:44344/");
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
+
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var response = await userInfoClient.GetAsync(accessToken);
+
+            if (response.IsError)
+            {
+                throw new Exception("Problem accessing the UserInfo endpoint.", response.Exception);
+            }
+
+            var address = response.Claims.FirstOrDefault(o => o.Type == "address")?.Value;
+
+            return View(new OrderFrameViewModel(address));
         }
 
         private async Task WriteOutIdentityInformation()
