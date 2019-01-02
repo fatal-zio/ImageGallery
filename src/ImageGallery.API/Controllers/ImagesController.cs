@@ -62,7 +62,7 @@ namespace ImageGallery.API.Controllers
             if (!ModelState.IsValid)
             {
                 // return 422 - Unprocessable Entity when validation fails
-                return new UnprocessableEntityObjectResult(ModelState);
+                return new Helpers.UnprocessableEntityObjectResult(ModelState);
             }
 
             // Automapper maps only the Title in our configuration
@@ -140,7 +140,7 @@ namespace ImageGallery.API.Controllers
             if (!ModelState.IsValid)
             {
                 // return 422 - Unprocessable Entity when validation fails
-                return new UnprocessableEntityObjectResult(ModelState);
+                return new Helpers.UnprocessableEntityObjectResult(ModelState);
             }
 
             var imageFromRepo = _galleryRepository.GetImage(id);
