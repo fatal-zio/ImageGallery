@@ -46,6 +46,7 @@ namespace ImageGallery.Client
                     options.ResponseType = "code id_token";
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("address");
                     options.SaveTokens = true;
                     options.ClientSecret = "secret";
                     options.GetClaimsFromUserInfoEndpoint = true;

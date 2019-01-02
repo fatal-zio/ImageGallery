@@ -1,6 +1,7 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using ImageGallery.Common.Extensions;
 using System.Collections.Generic;
 using System.Security.Claims;
 
@@ -22,6 +23,7 @@ namespace Marvin.IDP
                     {
                         new Claim("given_name", "Frank"),
                         new Claim("family_name", "Underwood"),
+                        new Claim("address", "Main Road 1")
                     }
                 },
                 new TestUser
@@ -34,6 +36,20 @@ namespace Marvin.IDP
                     {
                         new Claim("given_name", "Claire"),
                         new Claim("family_name", "Underwood"),
+                        new Claim("address", "Big Street 2")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "5B3B0E25-9448-4826-A462-FDA5D704F6BB",
+                    Username = "fatalzio",
+                    Password = "SXJlbmVMZXc1".Decode(),
+
+                    Claims = new List<Claim>
+                    {
+                        new Claim("given_name", "Jayme"),
+                        new Claim("family_name", "Desrosiers"),
+                        new Claim("address", "123 Fake Street")
                     }
                 }
             };
@@ -44,7 +60,8 @@ namespace Marvin.IDP
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Address()
             };
         }
 
@@ -68,7 +85,8 @@ namespace Marvin.IDP
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address
                     },
                     ClientSecrets =
                     {
