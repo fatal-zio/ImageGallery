@@ -47,12 +47,14 @@ namespace ImageGallery.Client
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("address");
+                    options.Scope.Add("roles");
                     options.SaveTokens = true;
                     options.ClientSecret = "secret";
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.ClaimActions.Remove("amr");
                     options.ClaimActions.DeleteClaim("sid");
                     options.ClaimActions.DeleteClaim("idp");
+                    options.ClaimActions.MapUniqueJsonKey("role", "role");
                 });
         }
 
