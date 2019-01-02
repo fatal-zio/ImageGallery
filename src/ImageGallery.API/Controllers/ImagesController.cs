@@ -30,7 +30,7 @@ namespace ImageGallery.API.Controllers
             var imagesFromRepo = _galleryRepository.GetImages();
 
             // map to model
-            var imagesToReturn = Mapper.Map<IEnumerable<Model.Image>>(imagesFromRepo);
+            var imagesToReturn = Mapper.Map<IEnumerable<Model.ImageDto>>(imagesFromRepo);
 
             // return
             return Ok(imagesToReturn);
@@ -46,13 +46,13 @@ namespace ImageGallery.API.Controllers
                 return NotFound();
             }
 
-            var imageToReturn = Mapper.Map<Model.Image>(imageFromRepo);
+            var imageToReturn = Mapper.Map<Model.ImageDto>(imageFromRepo);
 
             return Ok(imageToReturn);
         }
 
         [HttpPost()]
-        public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
+        public IActionResult CreateImage([FromBody] ImageForCreationDto imageForCreation)
         {
             if (imageForCreation == null)
             {
@@ -99,7 +99,7 @@ namespace ImageGallery.API.Controllers
                 throw new Exception($"Adding an image failed on save.");
             }
 
-            var imageToReturn = Mapper.Map<Image>(imageEntity);
+            var imageToReturn = Mapper.Map<ImageDto>(imageEntity);
 
             return CreatedAtRoute("GetImage",
                 new { id = imageToReturn.Id },
@@ -129,7 +129,7 @@ namespace ImageGallery.API.Controllers
 
         [HttpPut("{id}")]
         public IActionResult UpdateImage(Guid id, 
-            [FromBody] ImageForUpdate imageForUpdate)
+            [FromBody] ImageForUpdateDto imageForUpdate)
         {
            
             if (imageForUpdate == null)

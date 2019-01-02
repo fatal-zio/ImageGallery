@@ -2,7 +2,7 @@
 
 namespace ImageGallery.Model
 {
-    public class Image
+    public class ImageDto
     {      
         public Guid Id { get; set; }
  

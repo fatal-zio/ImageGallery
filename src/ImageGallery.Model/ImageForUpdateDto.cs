@@ -2,7 +2,7 @@
 
 namespace ImageGallery.Model
 {
-    public class ImageForUpdate
+    public class ImageForUpdateDto
     {
         [Required]
         [MaxLength(150)]

@@ -61,18 +61,18 @@ namespace ImageGallery.API
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 // Map from Image (entity) to Image, and back
-                cfg.CreateMap<Image, Model.Image>().ReverseMap();
+                cfg.CreateMap<Image, Model.ImageDto>().ReverseMap();
 
                 // Map from ImageForCreation to Image
                 // Ignore properties that shouldn't be mapped
-                cfg.CreateMap<Model.ImageForCreation, Image>()
+                cfg.CreateMap<Model.ImageForCreationDto, Image>()
                     .ForMember(m => m.FileName, options => options.Ignore())
                     .ForMember(m => m.Id, options => options.Ignore())
                     .ForMember(m => m.OwnerId, options => options.Ignore());
 
                 // Map from ImageForUpdate to Image
                 // ignore properties that shouldn't be mapped
-                cfg.CreateMap<Model.ImageForUpdate, Image>()
+                cfg.CreateMap<Model.ImageForUpdateDto, Image>()
                     .ForMember(m => m.FileName, options => options.Ignore())
                     .ForMember(m => m.Id, options => options.Ignore())
                     .ForMember(m => m.OwnerId, options => options.Ignore());

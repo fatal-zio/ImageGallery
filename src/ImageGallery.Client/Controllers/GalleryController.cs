@@ -33,7 +33,7 @@ namespace ImageGallery.Client.Controllers
                 var imagesAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 var galleryIndexViewModel = new GalleryIndexViewModel(
-                    JsonConvert.DeserializeObject<IList<Image>>(imagesAsString).ToList());
+                    JsonConvert.DeserializeObject<IList<ImageDto>>(imagesAsString).ToList());
 
                 return View(galleryIndexViewModel);
             }          
@@ -51,7 +51,7 @@ namespace ImageGallery.Client.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var imageAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var deserializedImage = JsonConvert.DeserializeObject<Image>(imageAsString);
+                var deserializedImage = JsonConvert.DeserializeObject<ImageDto>(imageAsString);
 
                 var editImageViewModel = new EditImageViewModel()
                 {
@@ -75,7 +75,7 @@ namespace ImageGallery.Client.Controllers
             }
 
             // create an ImageForUpdate instance
-            var imageForUpdate = new ImageForUpdate()
+            var imageForUpdate = new ImageForUpdateDto()
                 { Title = editImageViewModel.Title };
 
             // serialize it
@@ -127,7 +127,7 @@ namespace ImageGallery.Client.Controllers
             }
 
             // create an ImageForCreation instance
-            var imageForCreation = new ImageForCreation()
+            var imageForCreation = new ImageForCreationDto()
                 { Title = addImageViewModel.Title };
 
             // take the first (only) file in the Files list
