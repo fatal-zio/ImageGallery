@@ -76,7 +76,8 @@ namespace Marvin.IDP
         {
             return new List<ApiResource>
             {
-                new ApiResource("imagegalleryapi", "Image Gallery API")
+                new ApiResource("imagegalleryapi", "Image Gallery API",
+                    new List<string>() {"role"})
             };
         }
 
