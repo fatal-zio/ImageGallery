@@ -7,38 +7,20 @@ namespace ImageGallery.API.Services
 {
     public class GalleryRepository : IGalleryRepository, IDisposable
     {
-        GalleryContext _context;
+        private GalleryContext _context;
 
-        public GalleryRepository(GalleryContext galleryContext)
-        {
-            _context = galleryContext;
-        }
-        public bool ImageExists(Guid id)
-        {
-            return _context.Images.Any(i => i.Id == id);
-        }       
+        public GalleryRepository(GalleryContext galleryContext) => _context = galleryContext;
+        public bool ImageExists(Guid id) => _context.Images.Any(i => i.Id == id);
 
-        public Image GetImage(Guid id)
-        {
-            return _context.Images.FirstOrDefault(i => i.Id == id);
-        }
-  
-        public IEnumerable<Image> GetImages()
-        {
-            return _context.Images
+        public Image GetImage(Guid id) => _context.Images.FirstOrDefault(i => i.Id == id);
+
+        public IEnumerable<Image> GetImages(string ownerId) => _context.Images
+                .Where(o => o.OwnerId == ownerId)
                 .OrderBy(i => i.Title).ToList();
-        }
 
-        public bool IsImageOwner(Guid id, string ownerId)
-        {
-            return _context.Images.Any(i => i.Id == id && i.OwnerId == ownerId);
-        }
+        public bool IsImageOwner(Guid id, string ownerId) => _context.Images.Any(i => i.Id == id && i.OwnerId == ownerId);
 
-
-        public void AddImage(Image image)
-        {
-            _context.Images.Add(image);
-        }
+        public void AddImage(Image image) => _context.Images.Add(image);
 
         public void UpdateImage(Image image)
         {
@@ -55,10 +37,7 @@ namespace ImageGallery.API.Services
             // the actual files as well) for demo purposes.
         }
 
-        public bool Save()
-        {
-            return (_context.SaveChanges() >= 0);
-        }
+        public bool Save() => _context.SaveChanges() >= 0;
 
         public void Dispose()
         {

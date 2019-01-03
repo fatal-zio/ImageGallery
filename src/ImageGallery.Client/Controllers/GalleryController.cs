@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -42,7 +43,11 @@ namespace ImageGallery.Client.Controllers
                     JsonConvert.DeserializeObject<IList<ImageDto>>(imagesAsString).ToList());
 
                 return View(galleryIndexViewModel);
-            }          
+            }       
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }

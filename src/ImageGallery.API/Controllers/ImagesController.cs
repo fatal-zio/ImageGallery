@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ImageGallery.API.Controllers
@@ -27,11 +28,13 @@ namespace ImageGallery.API.Controllers
         [HttpGet()]
         public IActionResult GetImages()
         {
+            var ownerId = User.Claims.FirstOrDefault(o => o.Type == "sub")?.Value;
+
             // get from repo
-            var imagesFromRepo = _galleryRepository.GetImages();
+            var imagesFromRepo = _galleryRepository.GetImages(ownerId);
 
             // map to model
-            var imagesToReturn = Mapper.Map<IEnumerable<Model.ImageDto>>(imagesFromRepo);
+            var imagesToReturn = Mapper.Map<IEnumerable<ImageDto>>(imagesFromRepo);
 
             // return
             return Ok(imagesToReturn);
@@ -39,7 +42,7 @@ namespace ImageGallery.API.Controllers
 
         [HttpGet("{id}", Name = "GetImage")]
         public IActionResult GetImage(Guid id)
-        {          
+        {
             var imageFromRepo = _galleryRepository.GetImage(id);
 
             if (imageFromRepo == null)
@@ -47,7 +50,7 @@ namespace ImageGallery.API.Controllers
                 return NotFound();
             }
 
-            var imageToReturn = Mapper.Map<Model.ImageDto>(imageFromRepo);
+            var imageToReturn = Mapper.Map<ImageDto>(imageFromRepo);
 
             return Ok(imageToReturn);
         }
