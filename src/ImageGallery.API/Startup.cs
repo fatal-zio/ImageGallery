@@ -1,5 +1,7 @@
-﻿using ImageGallery.API.Entities;
+﻿using IdentityServer4.AccessTokenValidation;
+using ImageGallery.API.Entities;
 using ImageGallery.API.Services;
+using ImageGallery.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,21 +16,25 @@ namespace ImageGallery.API
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-        
+        public Startup(IConfiguration configuration) => Configuration = configuration;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddMvc();
+            services.AddMvc();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "https://localhost:44344/";
+                    options.ApiName = "imagegalleryapi";
+                });
         
             // register the DbContext on the container, getting the connection string from
             // appSettings (note: use this during development; in a production environment,
             // it's better to store the connection string in an environment variable)
-            var connectionString = Configuration["ConnectionStrings:imageGalleryDBConnectionString"];
+            var connectionString = Configuration["ConnectionStrings:imageGalleryDBConnectionString"].Decode();
             services.AddDbContext<GalleryContext>(o => o.UseSqlServer(connectionString));
 
             // register the repository
@@ -55,6 +61,8 @@ namespace ImageGallery.API
                     });
                 });
             }
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 
