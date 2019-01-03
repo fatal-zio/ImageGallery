@@ -37,7 +37,7 @@ namespace ImageGallery.API
                     });
             });
 
-            services.AddScoped<IAuthorizationHandler, MustOwnImageHandler>()
+            services.AddScoped<IAuthorizationHandler, MustOwnImageHandler>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
