@@ -92,6 +92,9 @@ namespace Marvin.IDP
             {
                 new ApiResource("imagegalleryapi", "Image Gallery API",
                     new List<string>() {"role"})
+                {
+                    ApiSecrets = { new Secret("apisecret".Sha256()) }
+                }
             };
         }
 
